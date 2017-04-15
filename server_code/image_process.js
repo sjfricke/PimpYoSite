@@ -1,11 +1,10 @@
-var fs = require('fs'); //used to read and write to file
-var request = require('request'); //used to download
-var sizeOf = require('image-size'); //used to get size
-var resizeImg = require('resize-img');
-var argv = require('minimist')(process.argv.slice(2)); //only used for -v verbose of console.logs()
+const fs = require('fs'); //used to read and write to file
+const request = require('request'); //used to download
+const sizeOf = require('image-size'); //used to get size
+const resizeImg = require('resize-img');
 
 var __globals = require("./globals"); //used to hold local variables across application;
-
+const DEBUG = __globals.debug;
 
 // These functions are exported to modulize the files
 // Have created functions to use global array
@@ -17,12 +16,12 @@ module.exports = {
         var file_name = __globals.images[index].file_name;
         var image_name = __globals.images[index].image_name;        
         
-        if (argv.v){console.log("\turi: " + uri);}
-        if (argv.v){console.log("\tfile name: " + file_name);}
+        if (DEBUG){console.log("\turi: " + uri);}
+        if (DEBUG){console.log("\tfile name: " + file_name);}
         
         request.head(uri, function(err, res, body){
             
-            if (argv.v){console.log("attempting: " + image_name);} // res.headers['content-type']
+            if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
             
             // file size in bytes, note 1024 not 1000 from bytes to KB
             __globals.images[index].file_size = res.headers['content-length'];            
@@ -63,7 +62,7 @@ module.exports = {
             }
             
             // prints out width and heights of display and download size
-            if (argv.v){console.log(__globals.images[i].image_name + "\n\t\t width: " + __globals.images[i].old_width + " should be: " + __globals.images[i].display_width + "\n\t\t height: " + __globals.images[i].old_height + " should be: " + __globals.images[i].display_height);}
+            if (DEBUG){console.log(__globals.images[i].image_name + "\n\t\t width: " + __globals.images[i].old_width + " should be: " + __globals.images[i].display_width + "\n\t\t height: " + __globals.images[i].old_height + " should be: " + __globals.images[i].display_height);}
         }
         callback();
     },    
@@ -80,7 +79,7 @@ module.exports = {
                 .then(function(buf){
                     fs.writeFileSync(directory + element.image_name, buf);
                     
-                    if (argv.v){console.log("Resized file wrote to: " + directory + element.image_name);}
+                    if (DEBUG){console.log("Resized file wrote to: " + directory + element.image_name);}
                     
                     __globals.images[index].new_file_size = buf.byteLength;   
                     __globals.size.new += buf.byteLength;   

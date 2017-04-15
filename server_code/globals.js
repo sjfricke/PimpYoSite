@@ -4,6 +4,9 @@
 //      well with this being my first large asynch node script it made stuff a lot cleaner
 //      If you have a better suggestion to get rid of globals, message me up! I love to learn stuff
 module.exports = { 
+
+    // turns on debugging for whole server code
+    debug: true,
     
     // the array of each image and the meta data with it
     images : [],

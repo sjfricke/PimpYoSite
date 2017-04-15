@@ -12,6 +12,7 @@ var http = require('http'); //Node.js module creates an instance of HTTP to make
 //var io = require('./sockets').listen(server) //allows for sockets on the HTTP server instance
 
 var api = require('./routes/api'); //gets api logic from path
+var pimp = require('./server_code/pimp.js');
 
 //add for Mongo support
 var mongoose = require('mongoose');                         
@@ -43,8 +44,30 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/pimpScript', (req, res, next) => {
-    console.log(req.body.url);
-    res.send("TEST");
+
+    // First validate values
+    // do on server side to prevent glitch bypassing front
+    // or that guy who reads the sources and post-man trolls me
+    if (!validateSite(req.body.url)) {
+	res.send("Invalid Website URL");
+	return;
+    }
+    
+    if (req.body.threshold == NaN  || req.body.threshold < 1) {
+	res.send("threshold needs to be a positive value representing the percentage");
+	return;
+    }
+	
+    
+    let done = pimp({
+	"url" : req.body.url,
+	"id" : 42,
+	"threshold": req.body.threshold
+    });
+    if (done) {
+    res.send(done);
+    }
+	
 });
 
 // catch 404 and forward to error handler
@@ -64,6 +87,21 @@ app.post('/pimpScript', (req, res, next) => {
 });*/
 
 
+// ------------ Helper Functions -----------//
+
+// checks and makes sure site is valid
+// note: valid doesn't mean it will work, server_code checks that
+// returns false if not valid
+function validateSite(url) {
+    var pattern = new RegExp(
+	'^(https?:\\/\\/)?'+ // protocol
+	'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+	'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+	'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+	'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+	'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return pattern.test(url);
+}
 
 // ------------ Server Setup --------------//
 

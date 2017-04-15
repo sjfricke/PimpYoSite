@@ -7,14 +7,24 @@ function sendInput() {
 	$('#nameOutput').html("Invalid URL");
 	return;
     }
+
+    var threshold = 10; // 10%
+    threshold = validateThreshold(threshold);
+    if (threshold < 0) {
+	$('#nameOutput').html("Invalid Threshold");
+	return;
+    }
     
     // makes call to server
     $.post('/pimpScript',
 	   {
-	       "url" : url
+	       "url" : url,
+	       "threshold" : threshold
 	   },
 	   function(result) {
-	$('#nameOutput').html(result);
+	       //if (error) { alert(error); }
+	       console.log(result);
+	       $('#nameOutput').html(result);
     });
 }
 
@@ -30,4 +40,19 @@ function validateSite(url) {
 	'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
 	'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return pattern.test(url);
+}
+
+// front line defense to bad threshold input
+// returns threshold or -1 if bad
+function validateThreshold(threshold) {
+    if (threshold) {
+	if (threshold == NaN  || threshold <= 0) {
+	    console.log("--threshold needs to be a positive value representing the percentage");
+	    return -1;
+	} else {
+	    return ((threshold / 100) + 1); //valid threshold as a inclusive percent (ex: 110%)
+	}
+    } else {
+	return ((10 / 100) + 1); //default - 110%
+    }
 }

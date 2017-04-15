@@ -16,12 +16,12 @@ module.exports = {
         var file_name = __globals.images[index].file_name;
         var image_name = __globals.images[index].image_name;        
         
-        if (DEBUG){console.log("\turi: " + uri);}
-        if (DEBUG){console.log("\tfile name: " + file_name);}
+//        if (DEBUG){console.log("\turi: " + uri);}
+  //      if (DEBUG){console.log("\tfile name: " + file_name);}
         
         request.head(uri, function(err, res, body){
             
-            if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
+//        if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
             
             // file size in bytes, note 1024 not 1000 from bytes to KB
             __globals.images[index].file_size = res.headers['content-length'];            
@@ -74,7 +74,7 @@ module.exports = {
             if (!element.resize) { 
                 return; //skip image, its all good
             } else {                
-                console.dir(element);
+                //console.dir(element);
                 resizeImg(fs.readFileSync(element.file_name), {width : element.new_width, height : element.new_height} )
                 .then(function(buf){
                     fs.writeFileSync(directory + element.image_name, buf);

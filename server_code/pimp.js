@@ -88,11 +88,11 @@ Nightmare (headless browser) sequence
 	    __globals.images = result;
 	    __globals.image_count = result.length;
 	    
-	    if (DEBUG) {
-		console.log("**************************\n");
-		console.log(__globals.image_count + " images found");
-		console.log("\n**************************\n");
-	    }
+	    __globals.db_data.image_total = result.length;
+	    __globals.db_data.url = SITE.url;
+	    __globals.db_data.id = SITE.id;
+	    
+	    //io - found X images
 	    
 	    // creates directory to store files
 	    var directory_old = "results/" + SITE.id + "/old/";
@@ -102,12 +102,16 @@ Nightmare (headless browser) sequence
 	    fs.ensureDirSync(directory_old, function (err) { console.log(err); })
 	    fs.ensureDirSync(directory_new, function (err) { console.log(err); })
 
+	    __globals.db_data.old_directory = directory_old;
+	    __globals.db_data.new_directory = directory_new;
+	    
 	    for (var i = 0; i < __globals.image_count; i++) {
 
 		// makes sure there is a valid src for the iamge
 		if (__globals.images[i].src != 'undefined' || __globals.images[i].src != null){
 
-		    if (DEBUG){console.log(i + ": ");}
+		    //console.log(i + ": ");
+		    // io - path to image
 
 		    // need to make sure its a valid file name, idk how its saved on the server anyways... TODO
 		    __globals.images[i].image_name = sanitize(__globals.images[i].src.substring(__globals.images[i].src.lastIndexOf("/") + 1));
@@ -121,49 +125,79 @@ Nightmare (headless browser) sequence
 		    __globals.counter = 0; //reset counter
 
 		    // downloads each image by passing in index of loop
-		    console.log("download");
+		    //console.log("download");
 		    image_process.download(i, (return_image) => {
 
 			//counts to wait to sync/barrier async for all images to download before resizing
 			__globals.counter++;
-			if (DEBUG){console.log(return_image + " saved! \t" + __globals.counter + " of " + __globals.image_count);}
+
+			//io - download
+			console.log(return_image + " saved! \t" + __globals.counter + " of " + __globals.image_count);
 
 			// All files have been downloaded
 			if (__globals.counter == __globals.image_count) {
 
 			    __globals.counter = 0; //reset counter
-			    if (DEBUG){console.log("\n**************************\n");}
+			    console.log("\n**************************\n");
 
 			    // checks each image for needed to be resized or not
 			    image_process.checkSize(SITE.threshold, () => {
-				if (DEBUG){console.log("\n**************************\n");}
+				console.log("\n**************************\n");
 
 				// resizes all images marked as too big
 				image_process.resize(directory_new, SITE.threshold, (element) => {
 
 				    __globals.counter++;
 
+				    // acts as synching barrier
 				    if (__globals.counter == __globals.resize_count) {
+
+					__globals.db_data.images_bad = __globals.resize_count;
+					
 					//done, report time
-					if (DEBUG){console.log("\n**************************\n");}
+					console.log("\n**************************\n");
 					console.log("SpeedMySite Report:");
 					console.log("_______________________________________________");
 					console.log("Files found: " + __globals.image_count);
 					console.log("Files found for resizing: " + __globals.resize_count);
 					console.log("Images Resized: ");
 					for(var i = 0; i < __globals.image_count; i++){
+;
+					    let file_info = {
+						"resized": false,
+						"image_name" :  __globals.images[i].image_name,
+						"old_size" : -1,
+						"new_size" : -1,
+						"new_path" : ""
+					    };
+
+
 					    if (__globals.images[i].resize) {
+						file_info.resized = true;
+						file_info.old_size = __globals.images[i].file_size;
+						file_info.new_size = __globals.images[i].new_file_size;
+						    						
 						console.log("\t" + __globals.images[i].image_name + " from " + __globals.images[i].file_size + " to " + __globals.images[i].new_file_size + " bytes");
+
 					    }
+
+					    __globals.db_data.images_data.push(file_info);
 					}
+
+					var total_saved = (__globals.size.old - __globals.size.new);
+					
+					__globals.db_data.old_size = __globals.size.old;
+					__globals.db_data.new_size = __globals.size.new;
+					__globals.db_data.total_saved = total_saved;			
+					
 					console.log("_______________________________________________");
 					console.log("Old files size: \t" + __globals.size.old + " bytes");
 					console.log("New files size: \t" + __globals.size.new + " bytes");
 					console.log("_______________________________________________");
-					var total_saved = (__globals.size.old - __globals.size.new);
 					console.log("Total size saved: \t" + total_saved + " bytes");
 					console.log("\tor\t\t" + (total_saved / 1024).toFixed(3) + " KB");
 					console.log("\tor\t\t" + (total_saved / 1024 / 1024).toFixed(3) + " MB");
+					console.log("ALL GOOD:");
 					resolve("All good");
 				    }
 				})
@@ -175,11 +209,11 @@ Nightmare (headless browser) sequence
 		    // TODO
 		}
 	    } // for(i < image_counter) 
-
-	    if (DEBUG){console.log("\n**************************\n");} //barrier after file and url display
-	})
-	.catch(function (error) {
-	    reject("Search failed: " + error);
+	    
+	    console.log("\n**************************\n"); //barrier after file and url display
+	}).catch(function (error) {
+	    console.log(error);
+//	    reject("Search failed: " + error);
 	}); //end of Nightmare    
     }); // promise
 }// module.export

@@ -32,6 +32,19 @@ module.exports = {
     blackList: [
             "https://maps.googleapis.com",
             "https://maps.gstatic.com"
-    ]
-    
+    ],
+
+    // data to be stored in database
+    db_data: {
+	"id" : -1,
+	"url" : "",
+	"images_total" : -1,
+	"images_bad" : -1,
+	"images_data" : [],
+	"old_size" : -1,
+	"new_size" : -1,
+	"total_saved" : -1,
+	"old_directory" : "",
+	"new_directory" : ""
+    }
 }

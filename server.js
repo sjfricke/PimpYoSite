@@ -11,11 +11,8 @@ var server = require('http').createServer(app); //creates an HTTP server instanc
 var http = require('http'); //Node.js module creates an instance of HTTP to make calls to Pi
 //var io = require('./sockets').listen(server) //allows for sockets on the HTTP server instance
 
-var api = require('./routes/api'); //gets api logic from path
-var pimp = require('./server_code/pimp.js');
-
 //add for Mongo support
-var mongoose = require('mongoose');                         
+var mongoose = require('mongoose');
 var mongoURI = "mongodb://127.0.0.1:27017/PimpYoSite";
 var MongoDB = mongoose.connect(mongoURI).connection;
 MongoDB.on('error', function(err) { console.log(err.message); });
@@ -23,6 +20,10 @@ MongoDB.once('open', function() {
   console.log("mongodb connection open");
 });
 
+var api = require('./routes/api'); //gets api logic from path
+var pimp_db = require('./routes/pimps/pimps.controller.js');
+var pimp = require('./server_code/pimp.js');
+var __globals = require('./server_code/globals.js');
 
 //-------------------------Express JS configs-----------------------------//
 //view engine setup
@@ -61,12 +62,24 @@ app.post('/pimpScript', (req, res, next) => {
     
     pimp({
 	"url" : req.body.url,
-	"id" : 42,
+	"id" : (new Date()).getTime(),
 	"threshold": req.body.threshold
     }).then((data) => {
-	res.status(200).send(data);
+	console.log("about to create");
+	console.dir(pimp_db.create);
+	pimp_db.create(__globals.db_data, (err, post) => {
+	    if (err) {
+		console.log("ERROROROR");
+		res.status(401).send(err);
+		return;
+	    }
+	    res.status(200).send("created");
+	    return;	    
+	})
     }).catch((error) => {
-	res.status(400).send(error);
+	console.log("ERRRRROR" + error);
+//	res.status(402).send(error);
+//	return;
     });
     
 });

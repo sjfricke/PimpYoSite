@@ -1,7 +1,7 @@
 var Nightmare = require('nightmare'); //used to run the headless browser
 var nightmare = Nightmare({ show: false }); //default is true
-var sanitize = require("sanitize-filename"); //used to make sure file names are correct
-var fs = require('fs-extra'); //used to make directory checking eaiser
+const sanitize = require("sanitize-filename"); //used to make sure file names are correct
+const fs = require('fs-extra'); //used to make directory checking eaiser
 
 var image_process = require("./image_process.js"); //set of image processing functions
 var __globals = require("./globals.js"); //used to hold local variables across application;
@@ -11,12 +11,8 @@ const DEBUG = __globals.debug;
 
 module.exports = (SITE) => {
     console.log("start pimp");
-  //  return new Promise((resolve, reject) => {
-    console.log("starting return:  " + DEBUG);
-    console.dir(SITE);
-
-    console.log(known_black_list);
-//    return "TESTTT";
+    return new Promise((resolve, reject) => {
+	console.log("starting promise");
 /********************************************
 Nightmare (headless browser) sequence
 ********************************************/
@@ -30,7 +26,6 @@ Nightmare (headless browser) sequence
     // runs a console expression on site to extract image details
 	.evaluate(function(known_black_list){
 	    var all_images = [];
-	    return "test";
 
 	    // loops through and gets all the images on page useing jQuery
 	    $('*').each(function(){
@@ -87,7 +82,9 @@ Nightmare (headless browser) sequence
     // ends nightmare
 	.end()
 	.then(function (result) {
-	    console.log("Images found");
+
+	    console.log("evluated");
+	    
 	    __globals.images = result;
 	    __globals.image_count = result.length;
 	    
@@ -167,28 +164,26 @@ Nightmare (headless browser) sequence
 					console.log("Total size saved: \t" + total_saved + " bytes");
 					console.log("\tor\t\t" + (total_saved / 1024).toFixed(3) + " KB");
 					console.log("\tor\t\t" + (total_saved / 1024 / 1024).toFixed(3) + " MB");
-					//resolve("All good");
+					resolve("All good");
 				    }
-
-
 				})
-			    });
-			}
-
-		    });
+			    }); // CheckSize
+			} // counter == image_count 
+		    }); // download
+		} else {
+		    // on bad src
+		    // TODO
 		}
-	    }
+	    } // for(i < image_counter) 
+
 	    if (DEBUG){console.log("\n**************************\n");} //barrier after file and url display
 	})
 	.catch(function (error) {
-	    return('Search failed:' +  error);
-	    //reject("Search failed: " + error);
-	}); //end of Nightmare
-
-
-    //Work around to check if jquery is there or not
-    //.evaluate(function () {if (typeof jQuery != 'undefined') { return jQuery.fn.jquery; } else {  return  jQuery.fn.jquery; }})
-
-    
-    //    }); // promise
+	    reject("Search failed: " + error);
+	}); //end of Nightmare    
+    }); // promise
 }// module.export
+
+
+//Work around to check if jquery is there or not
+//.evaluate(function () {if (typeof jQuery != 'undefined') { return jQuery.fn.jquery; } else {  return  jQuery.fn.jquery; }})

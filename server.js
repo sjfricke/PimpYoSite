@@ -59,15 +59,16 @@ app.post('/pimpScript', (req, res, next) => {
     }
 	
     
-    let done = pimp({
+    pimp({
 	"url" : req.body.url,
 	"id" : 42,
 	"threshold": req.body.threshold
+    }).then((data) => {
+	res.status(200).send(data);
+    }).catch((error) => {
+	res.status(400).send(error);
     });
-    if (done) {
-    res.send(done);
-    }
-	
+    
 });
 
 // catch 404 and forward to error handler

@@ -14,7 +14,8 @@ module.exports = {
     // size of total image files to be compared at end
     size : {
         old : 0,
-        new : 0 
+        new : 0,
+	saved: 0
     },
     
     // number of images found on the site
@@ -34,17 +35,12 @@ module.exports = {
             "https://maps.gstatic.com"
     ],
 
-    // data to be stored in database
-    db_data: {
-	"id" : -1,
-	"url" : "",
-	"images_total" : -1,
-	"images_bad" : -1,
-	"images_data" : [],
-	"old_size" : -1,
-	"new_size" : -1,
-	"total_saved" : -1,
-	"old_directory" : "",
-	"new_directory" : ""
-    }
+    // id and url for instance of pimp
+    id: 0,
+
+    url: "",
+
+    old_directory : "",
+    new_directory : ""
+
 }

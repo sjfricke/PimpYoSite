@@ -7,6 +7,7 @@
     var PimpsSchema = new Schema({
 	id: Number,
 	url: String,
+	threshold: Number,
 	images_total: Number,
 	images_bad: Number,
 	images_data: Array,

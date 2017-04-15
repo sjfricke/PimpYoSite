@@ -50,12 +50,12 @@ app.post('/pimpScript', (req, res, next) => {
     // do on server side to prevent glitch bypassing front
     // or that guy who reads the sources and post-man trolls me
     if (!validateSite(req.body.url)) {
-	res.send("Invalid Website URL");
+	res.status(400).send("Invalid Website URL");
 	return;
     }
     
     if (req.body.threshold == NaN  || req.body.threshold < 1) {
-	res.send("threshold needs to be a positive value representing the percentage");
+	res.status(400).send("threshold needs to be a positive value representing the percentage");
 	return;
     }
 	
@@ -65,21 +65,19 @@ app.post('/pimpScript', (req, res, next) => {
 	"id" : (new Date()).getTime(),
 	"threshold": req.body.threshold
     }).then((data) => {
-	console.log("about to create");
-	console.dir(pimp_db.create);
-	pimp_db.create(__globals.db_data, (err, post) => {
+	pimp_db.create(data, (err, post) => {
 	    if (err) {
 		console.log("ERROROROR");
 		res.status(401).send(err);
 		return;
 	    }
-	    res.status(200).send("created");
+	    res.status(200).json(post);
 	    return;	    
 	})
     }).catch((error) => {
 	console.log("ERRRRROR" + error);
-//	res.status(402).send(error);
-//	return;
+	res.status(402).send(error);
+	return;
     });
     
 });

@@ -34,8 +34,6 @@
 
     //create a new post
 	create : function(data, callback) {
-	    console.log("ASDFKLPA");
-	    console.dir(data);
 	    var pimp = new Pimps(data);
 	    pimp.save((err, post) => {
 		if (err) { callback(err); }

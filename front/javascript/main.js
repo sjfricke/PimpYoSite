@@ -21,9 +21,11 @@ function sendInput() {
 	       "url" : url,
 	       "threshold" : threshold
 	   },
-	   function(result) {
+	   function(result, statusText, xhr) {
 	       //if (error) { alert(error); }
 	       console.log(result);
+	       console.log(statusText);
+	       console.log(xhr);
 	       $('#nameOutput').html(result);
     });
 }

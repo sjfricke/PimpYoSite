@@ -10,9 +10,9 @@ var known_black_list = __globals.blackList;
 const DEBUG = __globals.debug;
 
 module.exports = (SITE) => {
-    console.log("start pimp");
+
     return new Promise((resolve, reject) => {
-	console.log("starting promise");
+
 /********************************************
 Nightmare (headless browser) sequence
 ********************************************/
@@ -88,23 +88,16 @@ Nightmare (headless browser) sequence
 	    __globals.images = result;
 	    __globals.image_count = result.length;
 	    
-	    __globals.db_data.image_total = result.length;
-	    __globals.db_data.url = SITE.url;
-	    __globals.db_data.id = SITE.id;
-	    
 	    //io - found X images
 	    
 	    // creates directory to store files
-	    var directory_old = "results/" + SITE.id + "/old/";
-	    var directory_new = "results/" + SITE.id + "/new/";
+	     __globals.old_directory = "results/" + SITE.id + "/old/";
+	     __globals.new_directory = "results/" + SITE.id + "/new/";
 	    
 	    // dir has now been created, including the directory it is to be placed in
-	    fs.ensureDirSync(directory_old, function (err) { console.log(err); })
-	    fs.ensureDirSync(directory_new, function (err) { console.log(err); })
+	    fs.ensureDirSync(__globals.old_directory, function (err) { console.log(err); })
+	    fs.ensureDirSync(__globals.new_directory, function (err) { console.log(err); })
 
-	    __globals.db_data.old_directory = directory_old;
-	    __globals.db_data.new_directory = directory_new;
-	    
 	    for (var i = 0; i < __globals.image_count; i++) {
 
 		// makes sure there is a valid src for the iamge
@@ -117,7 +110,7 @@ Nightmare (headless browser) sequence
 		    __globals.images[i].image_name = sanitize(__globals.images[i].src.substring(__globals.images[i].src.lastIndexOf("/") + 1));
 
 		    // creates full file name
-		    __globals.images[i].file_name = directory_old + __globals.images[i].image_name;
+		    __globals.images[i].file_name = __globals.old_directory + __globals.images[i].image_name;
 
 		    // sets file size to -1 to easy validate if not changed
 		    __globals.images[i].file_size = -1;
@@ -145,15 +138,13 @@ Nightmare (headless browser) sequence
 				console.log("\n**************************\n");
 
 				// resizes all images marked as too big
-				image_process.resize(directory_new, SITE.threshold, (element) => {
+				image_process.resize(__globals.new_directory, SITE.threshold, (element) => {
 
 				    __globals.counter++;
 
 				    // acts as synching barrier
 				    if (__globals.counter == __globals.resize_count) {
 
-					__globals.db_data.images_bad = __globals.resize_count;
-					
 					//done, report time
 					console.log("\n**************************\n");
 					console.log("SpeedMySite Report:");
@@ -173,32 +164,34 @@ Nightmare (headless browser) sequence
 
 
 					    if (__globals.images[i].resize) {
-						file_info.resized = true;
-						file_info.old_size = __globals.images[i].file_size;
-						file_info.new_size = __globals.images[i].new_file_size;
-						    						
 						console.log("\t" + __globals.images[i].image_name + " from " + __globals.images[i].file_size + " to " + __globals.images[i].new_file_size + " bytes");
-
 					    }
-
-					    __globals.db_data.images_data.push(file_info);
 					}
 
-					var total_saved = (__globals.size.old - __globals.size.new);
-					
-					__globals.db_data.old_size = __globals.size.old;
-					__globals.db_data.new_size = __globals.size.new;
-					__globals.db_data.total_saved = total_saved;			
+					__globals.size.saved = (__globals.size.old - __globals.size.new);
 					
 					console.log("_______________________________________________");
 					console.log("Old files size: \t" + __globals.size.old + " bytes");
 					console.log("New files size: \t" + __globals.size.new + " bytes");
 					console.log("_______________________________________________");
-					console.log("Total size saved: \t" + total_saved + " bytes");
-					console.log("\tor\t\t" + (total_saved / 1024).toFixed(3) + " KB");
-					console.log("\tor\t\t" + (total_saved / 1024 / 1024).toFixed(3) + " MB");
+					console.log("Total size saved: \t" + __globals.size.saved + " bytes");
+					console.log("\tor\t\t" + (__globals.size.saved / 1024).toFixed(3) + " KB");
+					console.log("\tor\t\t" + (__globals.size.saved / 1024 / 1024).toFixed(3) + " MB");
 					console.log("ALL GOOD:");
-					resolve("All good");
+
+					resolve({
+					    "id" : SITE.id,
+					    "url" : SITE.url,
+					    "threshold" : SITE.threshold,
+					    "images_total" : __globals.image_count,
+					    "images_bad" : __globals.resize_count,
+					    "images_data" : __globals.images,
+					    "old_size" : __globals.size.old,
+					    "new_size" : __globals.size.new,
+					    "total_saved" : __globals.size.saved,
+					    "old_directory" : __globals.old_directory,
+					    "new_directory" : __globals.new_directory
+					});
 				    }
 				})
 			    }); // CheckSize

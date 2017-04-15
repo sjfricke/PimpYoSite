@@ -47,6 +47,7 @@ Nightmare (headless browser) sequence
 			temp_object.image = $(this);
 			temp_object.src = ( $(this)[0].src );
 			if (temp_object.src.endsWith(".gif")) { return; } //don't add gif to list
+			if (temp_object.src.endsWith(".svg")) { return; } //don't add svg to list
 			temp_object.display_width = $(this)[0].clientWidth;
 			temp_object.display_height = $(this)[0].clientHeight;
 			
@@ -68,6 +69,7 @@ Nightmare (headless browser) sequence
 			temp_object.src = ( bg_url[2] );
 			
 			if (temp_object.src.endsWith(".gif")) { return; } //don't add gif to list
+			if (temp_object.src.endsWith(".svg")) { return; } //don't add svg to list
 			
 			all_images.push(temp_object);
 		    }
@@ -143,7 +145,7 @@ Nightmare (headless browser) sequence
 				    __globals.counter++;
 
 				    // acts as synching barrier
-				    if (__globals.counter == __globals.resize_count) {
+				    if (__globals.counter == __globals.resize_count || __globals.resize_count == 0) {
 
 					//done, report time
 					console.log("\n**************************\n");

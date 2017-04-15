@@ -1,6 +1,5 @@
 const fs = require('fs'); //used to read and write to file
 const request = require('request'); //used to download
-const sizeOf = require('image-size'); //used to get size
 const resizeImg = require('resize-img');
 
 var __globals = require("./globals"); //used to hold local variables across application;
@@ -42,28 +41,36 @@ module.exports = {
         var fix_list = [];
         for (var i = 0; i < __globals.images.length; i++) {
               
-            //gets actual photo size
-            var dimensions = sizeOf(__globals.images[i].file_name);
-            __globals.images[i].old_width = dimensions.width;
+	    //gets actual photo size
+	    var probe = require('probe-image-size');
+	    let dimensions = fs.readFileSync(__globals.images[i].file_name);
+	    dimensions = (probe.sync(dimensions));
+	    __globals.images[i].old_width = dimensions.width;
             __globals.images[i].old_height = dimensions.height;
-            
-            //checks if size is out of size range
-            //give 10% margin by default
-            if ((__globals.images[i].old_width >= __globals.images[i].display_width * threshold) &&
-                (__globals.images[i].old_height >= __globals.images[i].display_height * threshold)
+            __globals.images[i].file_type = dimensions.type;
+
+	    if (__globals.images[i].display_width <= 0 || __globals.images[i].display_height <= 0) {
+
+		__globals.images[i].resize = false; // ignore invalid display sizes
+		
+            } else if ((__globals.images[i].old_width >= __globals.images[i].display_width * threshold) &&  //checks if size is out of size range
+                       (__globals.images[i].old_height >= __globals.images[i].display_height * threshold)   //give 10% margin by default
             ) {
                 __globals.images[i].resize = true;
                 __globals.size.old += parseInt(__globals.images[i].file_size); //to compare to size resized
                 __globals.resize_count++;
                 __globals.images[i].new_width = Math.floor(__globals.images[i].display_width * threshold);
                 __globals.images[i].new_height = Math.floor(__globals.images[i].display_height * threshold);
+		
             } else {
-                __globals.images[i].resize = false; //better to have false then undefined
-            }
-            
+
+		__globals.images[i].resize = false; //better to have false then undefined
+
+	    }
+            console.log(__globals.images[i].resize);
             // prints out width and heights of display and download size
-            if (DEBUG){console.log(__globals.images[i].image_name + "\n\t\t width: " + __globals.images[i].old_width + " should be: " + __globals.images[i].display_width + "\n\t\t height: " + __globals.images[i].old_height + " should be: " + __globals.images[i].display_height);}
-        }
+            console.log(__globals.images[i].image_name + "\n\t\t width: " + __globals.images[i].old_width + " should be: " + __globals.images[i].display_width + "\n\t\t height: " + __globals.images[i].old_height + " should be: " + __globals.images[i].display_height);
+	}
         callback();
     },    
     
@@ -71,8 +78,8 @@ module.exports = {
     resize: function(directory, threshold, callback) {
         
         __globals.images.forEach(function(element, index, array) {
-            if (!element.resize) { 
-                return; //skip image, its all good
+            if (!element.resize) {
+                callback(); //skip image, its already a good size
             } else {                
                 //console.dir(element);
                 resizeImg(fs.readFileSync(element.file_name), {width : element.new_width, height : element.new_height} )

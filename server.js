@@ -7,9 +7,9 @@ var path = require('path'); //Node.js module used for getting path of file
 var logger = require('morgan'); //used to log in console window all request
 var cookieParser = require('cookie-parser'); //Parse Cookie header and populate req.cookies
 var bodyParser = require('body-parser'); //allows the use of req.body in POST request
-var server = require('http').createServer(app); //creates an HTTP server instance
-var http = require('http'); //Node.js module creates an instance of HTTP to make calls to Pi
-//var io = require('./sockets').listen(server) //allows for sockets on the HTTP server instance
+var http = require('http').Server(app); //creates an HTTP server instance
+//var http = require('http'); //Node.js module creates an instance of HTTP to make calls to Pi
+var io = require('socket.io')(http) //allows for sockets on the HTTP server instance
 
 //add for Mongo support
 var mongoose = require('mongoose');
@@ -59,11 +59,12 @@ app.post('/pimpScript', (req, res, next) => {
 	return;
     }
 	
-    
+    io.emit("stage2", {"test": "test2"});
     pimp({
 	"url" : req.body.url,
 	"id" : (new Date()).getTime(),
-	"threshold": req.body.threshold
+	"threshold": req.body.threshold,
+	"io" : io
     }).then((data) => {
 	pimp_db.create(data, (err, post) => {
 	    if (err) {
@@ -128,15 +129,17 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
-
+//var server = http.createServer(app);
+io.on('connection', function(socket){
+    console.log('a user connected');
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+http.listen(port);
+http.on('error', onError);
+http.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -191,7 +194,7 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
+  var addr = http.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;

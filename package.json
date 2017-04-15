@@ -26,6 +26,7 @@
     "nightmare": "^2.10.0",
     "probe-image-size": "^3.0.0",
     "resize-img": "^1.1.2",
-    "sanitize-filename": "^1.6.1"
+    "sanitize-filename": "^1.6.1",
+    "socket.io": "^1.7.3"
   }
 }

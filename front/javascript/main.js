@@ -19,7 +19,7 @@ function sendInput() {
     setLoadingScreen();
     
     // makes call to server
-/*    $.post('/pimpScript',
+    $.post('/pimpScript',
 	   {
 	       "url" : url,
 	       "threshold" : threshold
@@ -35,7 +35,7 @@ function sendInput() {
 		   location.reload();
 	       }
     });
-*/
+
 }
 
 // checks and makes sure site is valid

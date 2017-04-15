@@ -10,7 +10,8 @@ var known_black_list = __globals.blackList;
 const DEBUG = __globals.debug;
 
 module.exports = (SITE) => {
-    console.log("Started Pimp");
+//    console.log(SITE.io);
+  //  console.log("Started Pimp");
     return new Promise((resolve, reject) => {
 	console.log("started Promise");
 /********************************************
@@ -91,7 +92,7 @@ Nightmare (headless browser) sequence
 	    __globals.image_count = result.length;
 	    
 	    //io - found X images
-	    io.emit("stage2", {"remain" : "80%", "message": "Webpage Evaluated"});
+	    SITE.io.emit("stage2", {"remain" : "80%", "message": "Webpage Evaluated"});
 	    
 	    // creates directory to store files
 	     __globals.old_directory = "results/" + SITE.id + "/old/";

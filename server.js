@@ -9,9 +9,9 @@ var cookieParser = require('cookie-parser'); //Parse Cookie header and populate 
 var bodyParser = require('body-parser'); //allows the use of req.body in POST request
 var http = require('http').Server(app); //creates an HTTP server instance
 //var http = require('http'); //Node.js module creates an instance of HTTP to make calls to Pi
-var io = require('socket.io')(http) //allows for sockets on the HTTP server instance
+var io = require('socket.io')(http); //allows for sockets on the HTTP server instance
 
-//add for Mongo support
+//add for Mongo supportv
 var mongoose = require('mongoose');
 var mongoURI = "mongodb://127.0.0.1:27017/PimpYoSite";
 var MongoDB = mongoose.connect(mongoURI).connection;
@@ -60,6 +60,7 @@ app.post('/pimpScript', (req, res, next) => {
     }
 	
     io.emit("stage2", {"test": "test2"});
+//    console.log(io);
     pimp({
 	"url" : req.body.url,
 	"id" : (new Date()).getTime(),

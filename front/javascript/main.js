@@ -1,5 +1,5 @@
 function sendInput() {
-
+    
     // get value from text input
     let url = $('#nameInput').val();
 
@@ -14,20 +14,28 @@ function sendInput() {
 	$('#nameOutput').html("Invalid Threshold");
 	return;
     }
+
+    // waits until after quick front side validation scan
+    setLoadingScreen();
     
     // makes call to server
-    $.post('/pimpScript',
+/*    $.post('/pimpScript',
 	   {
 	       "url" : url,
 	       "threshold" : threshold
 	   },
 	   function(result, statusText, xhr) {
-	       //if (error) { alert(error); }
 	       console.log(result);
 	       console.log(statusText);
 	       console.log(xhr);
-	       $('#nameOutput').html(result);
+
+	       // reloads pages on error
+	       if (xhr.status != 200) {
+		   alert(result);
+		   location.reload();
+	       }
     });
+*/
 }
 
 // checks and makes sure site is valid

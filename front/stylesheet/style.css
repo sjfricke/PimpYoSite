@@ -1,0 +1,102 @@
+/* Safari 4.0 - 8.0 */
+\@-webkit-keyframes example1 {
+    0%   {color:red; font-size: 80%;}
+    25%  {color:yellow; font-size: 100%;}
+    50%  {color:blue; font-size: 120%;}
+    75%  {color:green; font-size: 100%;}
+    100% {color:red; font-size: 80%;}
+}
+
+/* Standard syntax */
+@keyframes example1 {
+    0%   {color:red; font-size: 80%;}
+    25%  {color:yellow; font-size: 100%;}
+    50%  {color:blue; font-size: 120%;}
+    75%  {color:green; font-size: 100%;}
+    100% {color:red; font-size: 80%;}
+}
+
+.animate1 {
+    -webkit-animation-name: example1; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    animation-name: example1;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+}
+
+/* Safari 4.0 - 8.0 */
+\@-webkit-keyframes example2 {
+    0%   {color:purple; font-size: 80%;}
+    25%  {color:blue; font-size: 100%;}
+    50%  {color:red; font-size: 120%;}
+    75%  {color:yellow; font-size: 100%;}
+    100% {color:purple; font-size: 80%;}
+}
+
+/* Standard syntax */
+@keyframes example2 {
+    0%   {color:purple; font-size: 80%;}
+    25%  {color:blue; font-size: 100%;}
+    50%  {color:red; font-size: 120%;}
+    75%  {color:yellow; font-size: 100%;}
+    100% {color:purple; font-size: 80%;}
+}
+
+.animate2 {
+    -webkit-animation-name: example2; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    animation-name: example2;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+}
+
+/* Safari 4.0 - 8.0 */
+\@-webkit-keyframes example3 {
+    0%   {color:blue; font-size: 80%;}
+    25%  {color:green; font-size: 100%;}
+    50%  {color:purple; font-size: 120%;}
+    75%  {color:red; font-size: 100%;}
+    100% {color:blue; font-size: 80%;}
+}
+
+/* Standard syntax */
+@keyframes example3 {
+    0%   {color:blue; font-size: 80%;}
+    25%  {color:green; font-size: 100%;}
+    50%  {color:purple; font-size: 120%;}
+    75%  {color:red; font-size: 100%;}
+    100% {color:blue; font-size: 80%;}
+}
+
+.animate3 {
+    -webkit-animation-name: example3; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    animation-name: example3;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 99;
+}
+
+#img1 {
+    /*padding: 0;
+    display: absolute;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+*/
+    height: 100%;
+    
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

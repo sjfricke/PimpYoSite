@@ -2,16 +2,66 @@
 <html>
   <head>
     <title>Pimp Yo Site!</title>
+    <style>
+      @font-face {
+      font-family: 'Dolphins';
+      src: url('stylesheet/dolphins.ttf');
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="stylesheet/style.css">
+    
   </head>
   
-  <body>
-    Enter the site we need to pimp:
-    <br>
-    <input id="nameInput" type="text">
-    <button onclick="sendInput()"> PIMP YO SITE!</button>
-    <br>
-    Output: <span id="nameOutput"></span>
+  <body id="center">
+
+    <div style="text-align: center;">
+
+      <div style="font-family: 'Dolphins'; font-size: 400%; font-weight: bold; height: 275px;">
+	<text class="animate1">Pimp</text>
+	<text class="animate2">Yo</text>
+	<text class="animate3">Site</text>
+      </div>
+
+      <h2 style="color: white;">Enter the site we need to pimp:</h2>
+      <br>
+      <input id="nameInput" type="text">
+      <br>
+      <button onclick="sendInput()"> PIMP YO SITE!</button>
+      <br>
+    </div>
+
   </body>
   <script src="library/jquery-3.1.1.min.js"></script>
+  
+  <script>
+    $(document).ready(function(){
+    var header = $('body');
+
+    var __current = 0;
+
+    function nextBackground() {
+
+    if (__current == 0) { 
+    header.css('background-image', "url('images/hex_1.png')");
+    __current++;
+    } else if (__current == 1) {
+    header.css('background-image', "url('images/hex_2.png')");
+    __current++;
+    } else {
+    header.css('background-image', "url('images/hex_3.png')");
+    __current = 0;
+    }
+
+    }
+    
+    setInterval(nextBackground, 1000);
+
+    header.css('background-image', "url('images/hex_1.png')");
+    header.css('background-position', "center");
+    header.css('background-size', "cover");
+    });
+  </script>
+  
+
   <script src="javascript/main.js"></script>
 </html>

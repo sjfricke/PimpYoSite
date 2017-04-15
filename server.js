@@ -38,12 +38,12 @@ app.use(express.static(path.join(__dirname, 'front'))); //sets all static file c
 app.use('/api', api);
 
 
-app.get('/', function(req, res, next) {
+app.get('/', (req, res, next) => {
   res.sendFile('index.html');
 });
 
-app.get('/chat', function(req, res, next) {
-    //res.render('sockets');
+app.post('/pimpScript', (req, res, next) => {
+    console.log(req.body.url);
     res.send("TEST");
 });
 

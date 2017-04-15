@@ -1,0 +1,19 @@
+{
+  "name": "pimp-yo-site",
+  "version": "1.0.0",
+  "description": "Time to pimp yo site and make it faster and better",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjfricke/PimpYoSite.git"
+  },
+  "author": "Spencer Fricke (sjfricke)",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/sjfricke/PimpYoSite/issues"
+  },
+  "homepage": "https://github.com/sjfricke/PimpYoSite#readme"
+}

@@ -59,8 +59,6 @@ app.post('/pimpScript', (req, res, next) => {
 	return;
     }
 	
-    io.emit("stage2", {"test": "test2"});
-//    console.log(io);
     pimp({
 	"url" : req.body.url,
 	"id" : (new Date()).getTime(),
@@ -81,6 +79,10 @@ app.post('/pimpScript', (req, res, next) => {
 	res.status(402).send(error);
 	return;
     });
+    
+});
+
+app.get("/results/:id", (req,res) => {
     
 });
 

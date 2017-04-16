@@ -38,3 +38,11 @@ function setLoadingScreen() {
     document.getElementById("loadingPage").style.display = "inline";
     document.getElementById("loadingBar").style.display = "inline";
 }
+
+function setResultPage() {
+    document.getElementById("loadingPage").style.display = "none";
+    document.getElementById("loadingBar").style.display = "none";
+    document.getElementById("resultPage").style.display = "inline";
+
+    resultScript();
+}

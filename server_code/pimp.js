@@ -10,10 +10,9 @@ var known_black_list = __globals.blackList;
 const DEBUG = __globals.debug;
 
 module.exports = (SITE) => {
-//    console.log(SITE.io);
-  //  console.log("Started Pimp");
     return new Promise((resolve, reject) => {
 	console.log("started Promise");
+	SITE.io.emit("stage", {"remain" : "92%", "message": "Time to spot up this site yo"});
 /********************************************
 Nightmare (headless browser) sequence
 ********************************************/
@@ -92,15 +91,15 @@ Nightmare (headless browser) sequence
 	    __globals.image_count = result.length;
 	    
 	    //io - found X images
-	    SITE.io.emit("stage2", {"remain" : "80%", "message": "Webpage Evaluated"});
+	    SITE.io.emit("stage", {"remain" : "80%", "message": "We got the good, times to examine"});
 	    
 	    // creates directory to store files
 	     __globals.old_directory = "results/" + SITE.id + "/old/";
 	     __globals.new_directory = "results/" + SITE.id + "/new/";
 	    
 	    // dir has now been created, including the directory it is to be placed in
-	    fs.ensureDirSync(__globals.old_directory, function (err) { console.log(err); })
-	    fs.ensureDirSync(__globals.new_directory, function (err) { console.log(err); })
+	    fs.ensureDirSync("front/" + __globals.old_directory, function (err) { console.log(err); })
+	    fs.ensureDirSync("front/" + __globals.new_directory, function (err) { console.log(err); })
 
 	    for (var i = 0; i < __globals.image_count; i++) {
 
@@ -121,8 +120,8 @@ Nightmare (headless browser) sequence
 
 		    __globals.counter = 0; //reset counter
 
+		    SITE.io.emit("stage", {"remain" : "70%", "message": "Illegally downloading photos"});
 		    // downloads each image by passing in index of loop
-		    //console.log("download");
 		    image_process.download(i, (return_image) => {
 
 			//counts to wait to sync/barrier async for all images to download before resizing
@@ -137,10 +136,12 @@ Nightmare (headless browser) sequence
 			    __globals.counter = 0; //reset counter
 			    console.log("\n**************************\n");
 
+			    SITE.io.emit("stage", {"remain" : "50%", "message": "Dang, you got big files boiii"});
 			    // checks each image for needed to be resized or not
 			    image_process.checkSize(SITE.threshold, () => {
 				console.log("\n**************************\n");
 
+				SITE.io.emit("stage", {"remain" : "30%", "message": "Let me fix these for you"});
 				// resizes all images marked as too big
 				image_process.resize(__globals.new_directory, SITE.threshold, (element) => {
 
@@ -172,6 +173,7 @@ Nightmare (headless browser) sequence
 					    }
 					}
 
+					SITE.io.emit("stage", {"remain" : "0%", "message": "We did it Reddit!"});
 					__globals.size.saved = (__globals.size.old - __globals.size.new);
 					
 					console.log("_______________________________________________");
@@ -182,7 +184,7 @@ Nightmare (headless browser) sequence
 					console.log("\tor\t\t" + (__globals.size.saved / 1024).toFixed(3) + " KB");
 					console.log("\tor\t\t" + (__globals.size.saved / 1024 / 1024).toFixed(3) + " MB");
 					console.log("ALL GOOD:");
-
+					
 					resolve({
 					    "id" : SITE.id,
 					    "url" : SITE.url,

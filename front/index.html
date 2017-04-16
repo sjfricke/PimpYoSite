@@ -31,10 +31,22 @@
     </div>
 
     <div id="loadingPage" class="wrapper" style="text-align: center; display: none">
-      <div id="loadingMessage" style="font-size: 10vw; z-index: 199; position: absolute; margin-top: 40vh; margin-left: 21.5vw">Loading Page</div>
+      <div id="loadingMessage" style="font-size: 10vw; z-index: 199; position: absolute; margin-top: 25vh; margin-left: 15.5vw">Loading Page</div>
     </div>
-    <div id="loadingBar" style="position: absolute; height: 100%; right: 0; width: 95%; display: none; z-index: 99; background-color: white;"> </div>
+    <div id="loadingBar" style="position: absolute; height: 100%; right: 0; width: 100%; display: none; z-index: 99; background-color: white;"> </div>
 
+    <div id="resultPage" style="display: none;">
+
+      <h1> The Report! </h1>
+      <div id="report"></div>
+      
+      <h2> New Photos </h2>
+      <div id="newLinks"></div>
+
+      <h2> Old Photos </h2>
+      <div id="oldLinks"></div>
+    </div>
+    
   </body>
 
   <script src="/socket.io/socket.io.js"></script>

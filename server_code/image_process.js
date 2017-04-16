@@ -26,7 +26,7 @@ module.exports = {
             __globals.images[index].file_size = res.headers['content-length'];            
             
             //downloads and sends callback when done
-            request(uri).pipe(fs.createWriteStream(file_name))
+            request(uri).pipe(fs.createWriteStream("front/" + file_name))
             .on('close', function(){
                 callback(image_name);
             })
@@ -43,7 +43,7 @@ module.exports = {
               
 	    //gets actual photo size
 	    var probe = require('probe-image-size');
-	    let dimensions = fs.readFileSync(__globals.images[i].file_name);
+	    let dimensions = fs.readFileSync("front/" + __globals.images[i].file_name);
 	    dimensions = (probe.sync(dimensions));
 	    __globals.images[i].old_width = dimensions.width;
             __globals.images[i].old_height = dimensions.height;
@@ -82,9 +82,9 @@ module.exports = {
                 callback(); //skip image, its already a good size
             } else {                
                 //console.dir(element);
-                resizeImg(fs.readFileSync(element.file_name), {width : element.new_width, height : element.new_height} )
+                resizeImg(fs.readFileSync("front/" + element.file_name), {width : element.new_width, height : element.new_height} )
                 .then(function(buf){
-                    fs.writeFileSync(directory + element.image_name, buf);
+                    fs.writeFileSync("front/" + directory + element.image_name, buf);
                     
                     if (DEBUG){console.log("Resized file wrote to: " + directory + element.image_name);}
                     

@@ -20,9 +20,11 @@
     -webkit-animation-name: example1; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
     -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    -webkit-animation-timing-function: linear; /* Safari 4.0 - 8.0 */
     animation-name: example1;
     animation-duration: 6s;
     animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -47,9 +49,11 @@
     -webkit-animation-name: example2; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
     -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    -webkit-animation-timing-function: linear; /* Safari 4.0 - 8.0 */
     animation-name: example2;
     animation-duration: 6s;
     animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -74,9 +78,11 @@
     -webkit-animation-name: example3; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
     -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    -webkit-animation-timing-function: linear; /* Safari 4.0 - 8.0 */
     animation-name: example3;
     animation-duration: 6s;
     animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 html, body {
@@ -86,22 +92,52 @@ html, body {
     z-index: 99;
 }
 
-#img1 {
-    
-    /*padding: 0;
-    display: absolute;
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 100%;
-*/
-    height: 100%;
-    
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.pimpText {
+    font-family: 'Dolphins'; 
+    font-size: 12ch;
+    padding-top: 15px;
+    font-weight: bold;
+    height: 40%;
 }
 
+.pimpButton {
+    boarder-radius: 10px;
+    margin-top: 5px;
+}
+
+.pimpButton:hover {
+    background: black;
+    color: white;
+}
+
+#loadingPage {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    display:none;
+}
+
+#loadingMessage {
+    font-size: 10vw;
+    z-index: 199;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#loadingBar {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    width: 100%;
+    top: 0;
+    display: none;
+    z-index: 99;
+    background-color: white;
+}
 
 .wrapper {
     height: 100%;

@@ -14,27 +14,31 @@
   
   <body id="center">
 
-    <div id="startPage" style="text-align: center;">
+    <!-- STARTING PAGE -->
+    <div id="startPage" style="text-align: center; height: 100%;">
 
-      <div style="font-family: 'Dolphins'; font-size: 500%; font-weight: bold; height: 275px;">
-	<text class="animate1">Pimp</text>
-	<text class="animate2">Yo</text>
-	<text class="animate3">Site</text>
+      <div class="pimpText">
+      	<text class="animate1">Pimp</text>
+	      <text class="animate2">Yo</text>
+	      <text class="animate3">Site</text>
       </div>
 
-      <h2 style="color: white;">Enter the site we need to pimp:</h2>
+      <h2 style="color: black;">Enter the site we need to pimp:</h2>
       <br>
-      <input id="nameInput" type="text">
+      <input id="nameInput" type="text" placeholder="http://www.example.com">
       <br>
-      <button onclick="sendInput()"> PIMP YO SITE!</button>
+      <button onclick="sendInput()" class="pimpButton"> PIMP YO SITE!</button>
       <br>
     </div>
 
-    <div id="loadingPage" class="wrapper" style="text-align: center; display: none">
-      <div id="loadingMessage" style="font-size: 10vw; z-index: 199; position: absolute; margin-top: 25vh; margin-left: 15.5vw">Loading Page</div>
+    <!-- LOADING PAGE -->
+    <div id="loadingPage" class="wrapper">
+      <div id="loadingMessage">Loading Page</div>
+      
+    <div id="loadingBar"> </div>
     </div>
-    <div id="loadingBar" style="position: absolute; height: 100%; right: 0; width: 100%; display: none; z-index: 99; background-color: white;"> </div>
 
+    <!-- RESULT PAGE -->
     <div id="resultPage" style="display: none;">
 
       <h1> The Report! </h1>
@@ -51,6 +55,9 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="library/jquery-3.1.1.min.js"></script>
+  <script src="images/hex_1_base64.js"></script>
+  <script src="images/hex_2_base64.js"></script>
+  <script src="images/hex_3_base64.js"></script>
   <script src="javascript/design.js"> </script>
   <script src="javascript/socketClient.js"> </script>
   <script src="javascript/main.js"></script>

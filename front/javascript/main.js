@@ -6,41 +6,38 @@ function sendInput() {
     let url = $('#nameInput').val();
 
     if (!validateSite(url)) {
-	$('#nameOutput').html("Invalid URL");
-	return;
+		$('#nameOutput').html("Invalid URL");
+		return;
     }
 
     var threshold = 10; // 10%
     threshold = validateThreshold(threshold);
     if (threshold < 0) {
-	$('#nameOutput').html("Invalid Threshold");
-	return;
+		$('#nameOutput').html("Invalid Threshold");
+		return;
     }
 
     // waits until after quick front side validation scan
     setLoadingScreen();
     
-    // makes call to server
-    $.post('/pimpScript',
-	   {
-	       "url" : url,
-	       "threshold" : threshold
-	   },
-	   function(result, statusText, xhr) {
-	       _results = result;
-	       console.log(result);
-	       console.log(statusText);
-	       console.log(xhr);
+	// makes call to server
+	$.post('/pimpScript',
+	{
+		"url" : url,
+		"threshold" : threshold
+	},
+	function(result, statusText, xhr) {
+		_results = result;
 
-	       // reloads pages on error
-	       if (xhr.status != 200) {
-		   alert(result);
-		   location.reload();
-	       } else {
-		   //window.open('/results/' + results.id);
-		   setResultPage();
-	       }
-	   });
+		// reloads pages on error
+		if (xhr.status != 200) {
+			alert(result);
+			location.reload();
+		} else {
+			//window.open('/results/' + results.id);
+			setResultPage();
+		}
+	});
 
 }
 
@@ -58,10 +55,10 @@ function resultScript() {
     printString += ("Images Resized: <br><br>");
     for(var i = 0; i < _results.images_data[i].length; i++){
 
-	console.log(_results.images_data[i]);
-	if (_results.images_data[i].resize ) {
-	    printString += ("\t" + _results.images_data[i].image_name + " from " + _results.images_data[i].file_size + " to " + _results.images_data[i].new_file_size + " bytes <br><br>");
-	}
+		console.log(_results.images_data[i]);
+		if (_results.images_data[i].resize ) {
+		    printString += ("\t" + _results.images_data[i].image_name + " from " + _results.images_data[i].file_size + " to " + _results.images_data[i].new_file_size + " bytes <br><br>");
+		}
     }
     
     printString += ("<br><br>_______________________________________________<br><br>");
@@ -108,14 +105,12 @@ function validateSite(url) {
 // front line defense to bad threshold input
 // returns threshold or -1 if bad
 function validateThreshold(threshold) {
-    if (threshold) {
 	if (threshold == NaN  || threshold <= 0) {
 	    console.log("--threshold needs to be a positive value representing the percentage");
 	    return -1;
 	} else {
-	    return ((threshold / 100) + 1); //valid threshold as a inclusive percent (ex: 110%)
-	}
+	    return ((threshold / 100) + 1); //valid threshold as a inclusive percent (ex: 110%)	
     } else {
-	return ((10 / 100) + 1); //default - 110%
+		return ((10 / 100) + 1); //default - 110%
     }
 }

@@ -46,39 +46,39 @@ app.get('/', (req, res, next) => {
 
 app.post('/pimpScript', (req, res, next) => {
 
-    // First validate values
-    // do on server side to prevent glitch bypassing front
-    // or that guy who reads the sources and post-man trolls me
-    if (!validateSite(req.body.url)) {
-	res.status(400).send("Invalid Website URL");
-	return;
-    }
-    
-    if (req.body.threshold == NaN  || req.body.threshold < 1) {
-	res.status(400).send("threshold needs to be a positive value representing the percentage");
-	return;
-    }
-	
-    pimp({
-	"url" : req.body.url,
-	"id" : (new Date()).getTime(),
-	"threshold": req.body.threshold,
-	"io" : io
-    }).then((data) => {
-	pimp_db.create(data, (err, post) => {
-	    if (err) {
-		console.log("ERROROROR");
-		res.status(401).send(err);
-		return;
-	    }
-	    res.status(200).json(post);
-	    return;	    
-	})
-    }).catch((error) => {
-	console.log("ERRRRROR" + error);
-	res.status(402).send(error);
-	return;
-    });
+  // First validate values
+  // do on server side to prevent glitch bypassing front
+  // or that guy who reads the sources and post-man trolls me
+  if (!validateSite(req.body.url)) {
+    res.status(400).send("Invalid Website URL");
+    return;
+  }
+
+  if (req.body.threshold == NaN  || req.body.threshold < 1) {
+    res.status(400).send("threshold needs to be a positive value representing the percentage");
+    return;
+  }
+
+  pimp({
+    "url" : req.body.url,
+    "id" : (new Date()).getTime(),
+    "threshold": req.body.threshold,
+    "io" : io
+  }).then((data) => {
+    pimp_db.create(data, (err, post) => {
+      if (err) {
+        console.log("ERROROROR");
+        res.status(401).send(err);
+        return;
+      }
+      res.status(200).json(post);
+      return;	    
+    })
+  }).catch((error) => {
+    console.log("ERRRRROR" + error);
+    res.status(402).send(error);
+    return;
+  });
     
 });
 

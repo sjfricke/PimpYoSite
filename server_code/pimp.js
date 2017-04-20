@@ -44,7 +44,7 @@ Nightmare (headless browser) sequence
 			}
 		    }
 		    if (good_img) {
-			temp_object.image = $(this);
+			//temp_object.image = $(this);
 			temp_object.src = ( $(this)[0].src );
 			if (temp_object.src.endsWith(".gif")) { return; } //don't add gif to list
 			if (temp_object.src.endsWith(".svg")) { return; } //don't add svg to list
@@ -60,7 +60,7 @@ Nightmare (headless browser) sequence
 		    backImg = $(this).css('background-image');
 		    if (backImg != 'none') {
 			
-			temp_object.image = $(this);
+			//temp_object.image = $(this);
 			temp_object.display_width = $(this)[0].clientWidth;
 			temp_object.display_height = $(this)[0].clientHeight;
 			
@@ -85,6 +85,14 @@ Nightmare (headless browser) sequence
 	.end()
 	.then(function (result) {
 
+		/* result contains array of images with object
+		  {
+		    display_height: Number,
+    		display_width: Number,
+    		src : String 
+    	   }
+    	*/
+		
 	    console.log("evaluated");
 	    
 	    __globals.images = result;

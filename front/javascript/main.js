@@ -105,12 +105,14 @@ function validateSite(url) {
 // front line defense to bad threshold input
 // returns threshold or -1 if bad
 function validateThreshold(threshold) {
-	if (threshold == NaN  || threshold <= 0) {
-	    console.log("--threshold needs to be a positive value representing the percentage");
-	    return -1;
+	if (threshold) {
+		if (threshold == NaN  || threshold <= 0) {
+	  	  console.log("--threshold needs to be a positive value representing the percentage");
+		    return -1;
+		} else {
+		    return ((threshold / 100) + 1); //valid threshold as a inclusive percent (ex: 110%)
+		}
 	} else {
-	    return ((threshold / 100) + 1); //valid threshold as a inclusive percent (ex: 110%)	
-    } else {
 		return ((10 / 100) + 1); //default - 110%
-    }
+	}
 }

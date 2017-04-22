@@ -57,7 +57,7 @@ module.exports = {
                        (_site.images[i].old_height >= _site.images[i].display_height * _site.threshold)   //give 10% margin by default
             ) {
                 _site.images[i].resize = true;
-//                _site.size_old += parseInt(_site.images[i].file_size); //to compare to size resized
+//                _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
                 _site.count_resize++;
                 _site.images[i].new_width = Math.floor(_site.images[i].display_width * _site.threshold);
                 _site.images[i].new_height = Math.floor(_site.images[i].display_height * _site.threshold);
@@ -67,6 +67,7 @@ module.exports = {
 		_site.images[i].resize = false; //better to have false then undefined
 
 	    }
+	    _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
             console.log(_site.images[i].resize);
             // prints out width and heights of display and download size
             console.log(_site.images[i].image_name + "\n\t\t width: " + _site.images[i].old_width + " should be: " + _site.images[i].display_width + "\n\t\t height: " + _site.images[i].old_height + " should be: " + _site.images[i].display_height);

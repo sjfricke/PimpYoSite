@@ -133,10 +133,9 @@ Nightmare (headless browser) sequence
 		    _site.images[i].image_name = sanitize(_site.images[i].src.substring(_site.images[i].src.lastIndexOf("/") + 1));
 
 		    // creates full file paths
-		    _site.images[i].image_path = _site.new_directory + _site.images[i].images_name;
+		    _site.images[i].image_path = _site.new_directory + _site.images[i].image_name;
 		    _site.images[i].download_path = _site.old_directory + _site.images[i].image_name;
 
-		    if (i == 1) { console.log(_site.images[i].image_path); }
 		    // sets file size to -1 to easy validate if not changed
 		    _site.images[i].old_size = -1;
 
@@ -171,7 +170,6 @@ Nightmare (headless browser) sequence
 
 				_site.counter++;
 
-				console.log("count: ", _site.counter, "   count_resize: ", _site.count_resize);
 				// acts as synching barrier
 				if (_site.counter == _site.count_resize || _site.count_resize == 0) {
 

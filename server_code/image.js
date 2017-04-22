@@ -1,33 +1,36 @@
 // The outline diffinition for each image
-module.exports = { 
-    
-    // The source of each image
-    src : "", 
+module.exports = function() {
+    return {
+	// The source of each image
+	src : "", 
 
-    // Just the image file name
-    image_name : "",
+	// Just the image file name
+	image_name : "",
 
-    // path to image from server relative to index.html
-    file_path : "",
+	// path the get image when needed
+	image_path : "",
+	
+	// path to image from held to download
+	download_path : "",
 
-    // MIME type
-    file_type : "",
+	// MIME type
+	image_type : "",
 
-    // display info of image
-    display_width : -1,
-    display_height : -1,
- 
-    // original meta data of image
-    old_size : -1,
-    old_width : -1,
-    old_height : -1,
+	// display info of image
+	display_width : -1,
+	display_height : -1,
+	
+	// original meta data of image
+	old_size : -1,
+	old_width : -1,
+	old_height : -1,
 
-    // if image needs to be resized
-    resize : false,
+	// if image needs to be resized
+	resize : false,
 
-    // optional new meta data if resize is true
-    new_size : -1,
-    new_width : -1,
-    new_height : -1
-
+	// optional new meta data if resize is true
+	new_size : -1,
+	new_width : -1,
+	new_height : -1
+    };
 }

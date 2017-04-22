@@ -85,130 +85,126 @@ Nightmare (headless browser) sequence
 	.end()
 	.then(function (result) {
 
-		/* result contains array of images with object
-		  {
-		    display_height: Number,
-    		display_width: Number,
-    		src : String 
-    	   }
-    	*/
-		
-	    console.log("evaluated");
+	    // Creates instance of site
+	    var _site = require("./site.js")();
+
+	    _site.id = SITE.id;
+	    _site.url = SITE.url;
+	    _site.threshold = SITE.threshold;
 	    
-	    __globals.images = result;
-	    __globals.image_count = result.length;
+	    /* result contains array of images with object
+	       {
+ 	         display_height: Number,
+    	         display_width: Number,
+    	         src : String 
+    	       }
+    	    */
+
+	    _site.image_count = result.length;
+	    
+	    for (let i = 0; i < _site.image_count; i++) {
+		_site.images.push( require("./image")() );
+		_site.images[i].display_width = result[i].display_width;
+		_site.images[i].display_height = result[i].display_height;
+		_site.images[i].src = result[i].src;
+	    }
 	    
 	    //io - found X images
 	    SITE.io.emit("stage", {"remain" : "80%", "message": "We got the good, times to examine"});
 	    
 	    // creates directory to store files
-	     __globals.old_directory = "results/" + SITE.id + "/old/";
-	     __globals.new_directory = "results/" + SITE.id + "/new/";
+	    _site.new_directory = "results/" + SITE.id + "/";
+	    _site.old_directory = "downloads/" + SITE.id + "/";
 	    
 	    // dir has now been created, including the directory it is to be placed in
-	    fs.ensureDirSync("front/" + __globals.old_directory, function (err) { console.log(err); })
-	    fs.ensureDirSync("front/" + __globals.new_directory, function (err) { console.log(err); })
+	    // front appended as it can't be in URL to get image
+	    fs.ensureDirSync("front/" + _site.new_directory, function (err) { console.log(err); })
+	    fs.ensureDirSync( _site.old_directory, function (err) { console.log(err); })
 
-	    for (var i = 0; i < __globals.image_count; i++) {
+	    for (var i = 0; i < _site.image_count; i++) {
 
 		// makes sure there is a valid src for the iamge
-		if (__globals.images[i].src != 'undefined' || __globals.images[i].src != null){
+		if (_site.images[i].src != 'undefined' || _site.images[i].src != null){
 
 		    //console.log(i + ": ");
 		    // io - path to image
 
 		    // need to make sure its a valid file name, idk how its saved on the server anyways... TODO
-		    __globals.images[i].image_name = sanitize(__globals.images[i].src.substring(__globals.images[i].src.lastIndexOf("/") + 1));
+		    _site.images[i].image_name = sanitize(_site.images[i].src.substring(_site.images[i].src.lastIndexOf("/") + 1));
 
-		    // creates full file name
-		    __globals.images[i].file_name = __globals.old_directory + __globals.images[i].image_name;
+		    // creates full file paths
+		    _site.images[i].image_path = _site.new_directory + _site.images[i].images_name;
+		    _site.images[i].download_path = _site.old_directory + _site.images[i].image_name;
 
+		    if (i == 1) { console.log(_site.images[i].image_path); }
 		    // sets file size to -1 to easy validate if not changed
-		    __globals.images[i].file_size = -1;
+		    _site.images[i].old_size = -1;
 
-		    __globals.counter = 0; //reset counter
+		    _site.counter = 0; //reset counter incase
 
 		    SITE.io.emit("stage", {"remain" : "70%", "message": "Illegally downloading photos"});
 		    // downloads each image by passing in index of loop
-		    image_process.download(i, (return_image) => {
+		    image_process.download(_site.images[i], (return_image) => {
 
 			//counts to wait to sync/barrier async for all images to download before resizing
-			__globals.counter++;
+			_site.counter++;
 
 			//io - download
-			console.log(return_image + " saved! \t" + __globals.counter + " of " + __globals.image_count);
+			console.log(return_image + " saved! \t" + _site.counter + " of " + _site.image_count);
 
-			// All files have been downloaded
-			if (__globals.counter == __globals.image_count) {
+			// Barrier - All files have been downloaded
+			if (_site.counter == _site.image_count) {
 
-			    __globals.counter = 0; //reset counter
+			    _site.counter = 0; //reset counter
 			    console.log("\n**************************\n");
 
 			    SITE.io.emit("stage", {"remain" : "50%", "message": "Dang, you got big files boiii"});
 			    // checks each image for needed to be resized or not
-			    image_process.checkSize(SITE.threshold, () => {
-				console.log("\n**************************\n");
+			    // since only last download calls it, we are now essetially blocking
+			    image_process.checkSize(_site);
+			    
+			    console.log("\n**************************\n");
+			    
+			    SITE.io.emit("stage", {"remain" : "30%", "message": "Let me fix these for you"});
+			    // resizes all images marked as too big
+			    image_process.resize(_site, (element) => {
 
-				SITE.io.emit("stage", {"remain" : "30%", "message": "Let me fix these for you"});
-				// resizes all images marked as too big
-				image_process.resize(__globals.new_directory, SITE.threshold, (element) => {
+				_site.counter++;
 
-				    __globals.counter++;
+				console.log("count: ", _site.counter, "   count_resize: ", _site.count_resize);
+				// acts as synching barrier
+				if (_site.counter == _site.count_resize || _site.count_resize == 0) {
 
-				    // acts as synching barrier
-				    if (__globals.counter == __globals.resize_count || __globals.resize_count == 0) {
-
-					//done, report time
-					console.log("\n**************************\n");
-					console.log("SpeedMySite Report:");
-					console.log("_______________________________________________");
-					console.log("Files found: " + __globals.image_count);
-					console.log("Files found for resizing: " + __globals.resize_count);
-					console.log("Images Resized: ");
-					for(var i = 0; i < __globals.image_count; i++){
-;
-					    let file_info = {
-						"resized": false,
-						"image_name" :  __globals.images[i].image_name,
-						"old_size" : -1,
-						"new_size" : -1,
-						"new_path" : ""
-					    };
-
-
-					    if (__globals.images[i].resize) {
-						console.log("\t" + __globals.images[i].image_name + " from " + __globals.images[i].file_size + " to " + __globals.images[i].new_file_size + " bytes");
-					    }
+				    //done, report time
+				    console.log("\n**************************\n");
+				    console.log("SpeedMySite Report:");
+				    console.log("_______________________________________________");
+				    console.log("Files found: " + _site.image_count);
+				    console.log("Files found for resizing: " + _site.count_resize);
+				    console.log("Images Resized: ");
+				    for(var i = 0; i < _site.image_count; i++){
+				
+					if (_site.images[i].resize) {
+					    console.log("\t" + _site.images[i].image_name + " from " + _site.images[i].old_size + " to " + _site.images[i].new_size + " bytes");
 					}
-
-					SITE.io.emit("stage", {"remain" : "0%", "message": "We did it Reddit!"});
-					__globals.size.saved = (__globals.size.old - __globals.size.new);
-					
-					console.log("_______________________________________________");
-					console.log("Old files size: \t" + __globals.size.old + " bytes");
-					console.log("New files size: \t" + __globals.size.new + " bytes");
-					console.log("_______________________________________________");
-					console.log("Total size saved: \t" + __globals.size.saved + " bytes");
-					console.log("\tor\t\t" + (__globals.size.saved / 1024).toFixed(3) + " KB");
-					console.log("\tor\t\t" + (__globals.size.saved / 1024 / 1024).toFixed(3) + " MB");
-					console.log("ALL GOOD:");
-					
-					resolve({
-					    "id" : SITE.id,
-					    "url" : SITE.url,
-					    "threshold" : SITE.threshold,
-					    "images_total" : __globals.image_count,
-					    "images_bad" : __globals.resize_count,
-					    "images_data" : __globals.images,
-					    "old_size" : __globals.size.old,
-					    "new_size" : __globals.size.new,
-					    "total_saved" : __globals.size.saved,
-					    "old_directory" : __globals.old_directory,
-					    "new_directory" : __globals.new_directory
-					});
 				    }
-				})
-			    }); // CheckSize
+
+				    SITE.io.emit("stage", {"remain" : "0%", "message": "We did it Reddit!"});
+				    _site.size_saved = (_site.size_old - _site.size_new);
+				    
+				    console.log("_______________________________________________");
+				    console.log("Old files size: \t" + _site.size_old + " bytes");
+				    console.log("New files size: \t" + _site.size_new + " bytes");
+				    console.log("_______________________________________________");
+				    console.log("Total size saved: \t" + _site.size_saved + " bytes");
+				    console.log("\tor\t\t" + (_site.size_saved / 1024).toFixed(3) + " KB");
+				    console.log("\tor\t\t" + (_site.size_saved / 1024 / 1024).toFixed(3) + " MB");
+				    console.log("ALL GOOD:");
+				    
+				    resolve(_site);
+				}
+			    })
+			    
 			} // counter == image_count 
 		    }); // download
 		} else {

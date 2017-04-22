@@ -4,6 +4,7 @@
 # Result photos
 front/results/*
 results/*
+downloads/*
 
 # Logs
 logs

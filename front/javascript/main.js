@@ -35,7 +35,8 @@ function sendInput() {
 			location.reload();
 		} else {
 			//window.open('/results/' + results.id);
-			setResultPage();
+		    console.dir(result);
+		    //setResultPage();
 		}
 	});
 

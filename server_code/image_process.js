@@ -13,10 +13,10 @@ module.exports = {
         
         var uri = image.src;
         var download_path = image.download_path;
-	var image_name = image.image_name; // used for debugging from caller
-	
-	// if (DEBUG){console.log("\turi: " + uri);}
-	// if (DEBUG){console.log("\tfile name: " + file_name);}
+    	var image_name = image.image_name; // used for debugging from caller
+    	
+    	// if (DEBUG){console.log("\turi: " + uri);}
+    	// if (DEBUG){console.log("\tfile name: " + file_name);}
         
         request.head(uri, function(err, res, body){
             

@@ -100,9 +100,9 @@ Nightmare (headless browser) sequence
     	       }
     	    */
 
-	    _site.image_count = result.length;
+	    _site.count_image = result.length;
 	    
-	    for (let i = 0; i < _site.image_count; i++) {
+	    for (let i = 0; i < _site.count_image; i++) {
 		_site.images.push( require("./image")() );
 		_site.images[i].display_width = result[i].display_width;
 		_site.images[i].display_height = result[i].display_height;
@@ -121,7 +121,7 @@ Nightmare (headless browser) sequence
 	    fs.ensureDirSync("front/" + _site.new_directory, function (err) { console.log(err); })
 	    fs.ensureDirSync( _site.old_directory, function (err) { console.log(err); })
 
-	    for (var i = 0; i < _site.image_count; i++) {
+	    for (var i = 0; i < _site.count_image; i++) {
 
 		// makes sure there is a valid src for the iamge
 		if (_site.images[i].src != 'undefined' || _site.images[i].src != null){
@@ -149,10 +149,10 @@ Nightmare (headless browser) sequence
 			_site.counter++;
 
 			//io - download
-			console.log(return_image + " saved! \t" + _site.counter + " of " + _site.image_count);
+			console.log(return_image + " saved! \t" + _site.counter + " of " + _site.count_image);
 
 			// Barrier - All files have been downloaded
-			if (_site.counter == _site.image_count) {
+			if (_site.counter == _site.count_image) {
 
 			    _site.counter = 0; //reset counter
 			    console.log("\n**************************\n");
@@ -177,14 +177,14 @@ Nightmare (headless browser) sequence
 				    console.log("\n**************************\n");
 				    console.log("SpeedMySite Report:");
 				    console.log("_______________________________________________");
-				    console.log("Files found: " + _site.image_count);
+				    console.log("Files found: " + _site.count_image);
 				    console.log("Files found for resizing: " + _site.count_resize);
 				    console.log("Images Resized: ");
-				    for(var i = 0; i < _site.image_count; i++){
+				    for(var i = 0; i < _site.count_image; i++){
 				
-					if (_site.images[i].resize) {
-					    console.log("\t" + _site.images[i].image_name + " from " + _site.images[i].old_size + " to " + _site.images[i].new_size + " bytes");
-					}
+						if (_site.images[i].resize) {
+						    console.log("\t" + _site.images[i].image_name + " from " + _site.images[i].old_size + " to " + _site.images[i].new_size + " bytes");
+						}
 				    }
 
 				    SITE.io.emit("stage", {"remain" : "0%", "message": "We did it Reddit!"});
@@ -203,13 +203,13 @@ Nightmare (headless browser) sequence
 				}
 			    })
 			    
-			} // counter == image_count 
+			} // counter == count_image 
 		    }); // download
 		} else {
 		    // on bad src
 		    // TODO
 		}
-	    } // for(i < image_counter) 
+	    } // for(i < count_image) 
 	    
 	    console.log("\n**************************\n"); //barrier after file and url display
 	}).catch(function (error) {

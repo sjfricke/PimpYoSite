@@ -50,13 +50,11 @@ app.post('/pimpScript', (req, res, next) => {
   // do on server side to prevent glitch bypassing front
   // or that guy who reads the sources and post-man trolls me
   if (!validateSite(req.body.url)) {
-    res.status(400).send("Invalid Website URL");
-    return;
+    return res.status(400).send("Invalid Website URL");
   }
 
   if (req.body.threshold == NaN  || req.body.threshold < 1) {
-    res.status(400).send("threshold needs to be a positive value representing the percentage");
-    return;
+    return res.status(400).send("threshold needs to be a positive value representing the percentage");
   }
 
   pimp({
@@ -68,16 +66,15 @@ app.post('/pimpScript', (req, res, next) => {
     pimp_db.create(data, (err, post) => {
       if (err) {
         console.log("ERROROROR");
-        res.status(401).send(err);
-        return;
+        return res.status(401).send(err);
       }
-      res.status(200).json(post);
-      return;	    
+
+      // valid and all good return
+      return res.status(200).json(post);   
     })
   }).catch((error) => {
     console.log("ERRRRROR" + error);
-    res.status(402).send(error);
-    return;
+    return res.status(402).send(error);
   });
     
 });

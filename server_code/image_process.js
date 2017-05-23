@@ -19,6 +19,13 @@ module.exports = {
     	// if (DEBUG){console.log("\tfile name: " + file_name);}
         
         request.head(uri, function(err, res, body){
+
+            if (err) {
+                console.log("DOWNLOAD ERROR:");
+                console.error(err);
+            } else if (!res) {
+                console.log("NO RES ON DOWNLOAD:" + uri);
+            }
             
 	    // if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
             
@@ -80,7 +87,7 @@ module.exports = {
         
         _site.images.forEach(function(element, index, array) {
             if (!element.resize) {
-                callback(); //skip image, its already a good size
+                callback(element,0); //skip image, its already a good size
             } else {                
                 //console.dir(element);
                 resizeImg(fs.readFileSync(element.download_path), {width : element.new_width, height : element.new_height} )
@@ -91,8 +98,8 @@ module.exports = {
                     
                    element.new_size = buf.byteLength;   
                    _site.size_new += buf.byteLength;   
-                    
-                    callback(element);
+
+                    callback(element, 1);
                 }).catch(function (err) {
                      console.error("Error Resizing " + err);
                 });   

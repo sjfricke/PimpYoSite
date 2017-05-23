@@ -57,6 +57,9 @@ app.post('/pimpScript', (req, res, next) => {
     return res.status(400).send("threshold needs to be a positive value representing the percentage");
   }
 
+  // cleans URL if forgot http cause Nightmare cant use it then
+  if (req.body.url.substring(0,4) != "http") {req.body.url = "http://" + req.body.url;}
+
   pimp({
     "url" : req.body.url,
     "id" : (new Date()).getTime(),

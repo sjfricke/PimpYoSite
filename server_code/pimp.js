@@ -166,11 +166,11 @@ Nightmare (headless browser) sequence
 			    
 			    SITE.io.emit("stage", {"remain" : "30%", "message": "Let me fix these for you"});
 			    // resizes all images marked as too big
-			    image_process.resize(_site, (element) => {
+			    image_process.resize(_site, (element, resized) => {
 
-				_site.counter++;
+			    if (resized) { _site.counter++; }
 
-				// acts as synching barrier
+				// acts as synching barrier for resize
 				if (_site.counter == _site.count_resize || _site.count_resize == 0) {
 
 				    //done, report time

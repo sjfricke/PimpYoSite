@@ -21,13 +21,17 @@ module.exports = {
         request.head(uri, function(err, res, body){
 
             if (err) {
-                console.log("DOWNLOAD ERROR:");
-                console.error(err);
+                console.error("DOWNLOAD ERROR: Could not download " + uri + " because or error code: " + err.code );
+
+                image.error = true;
+                image.errorMessage = ("Download Error: " + err.code);
+                return callback(image_name);
+
             } else if (!res) {
                 console.log("NO RES ON DOWNLOAD:" + uri);
             }
             
-	    // if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
+	        // if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
             
             // file size in bytes, note 1024 not 1000 from bytes to KB
             image.old_size = res.headers['content-length'];            
@@ -48,33 +52,35 @@ module.exports = {
 
         for (var i = 0; i < _site.images.length; i++) {
               
-	    //gets actual photo size
-	    var probe = require('probe-image-size');
-	    let dimensions = fs.readFileSync(_site.images[i].download_path);
-	    dimensions = (probe.sync(dimensions));
-	    _site.images[i].old_width = dimensions.width;
-            _site.images[i].old_height = dimensions.height;
-            _site.images[i].image_type = dimensions.type;
+            if (_site.images[i].error) {continue;} // skip error files
 
-	    if (_site.images[i].display_width <= 0 || _site.images[i].display_height <= 0) {
+    	    //gets actual photo size
+    	    var probe = require('probe-image-size');
+    	    let dimensions = fs.readFileSync(_site.images[i].download_path);
+    	    dimensions = (probe.sync(dimensions));
+    	    _site.images[i].old_width = dimensions.width;
+                _site.images[i].old_height = dimensions.height;
+                _site.images[i].image_type = dimensions.type;
 
-		_site.images[i].resize = false; // ignore invalid display sizes
-		
-            } else if ((_site.images[i].old_width >= _site.images[i].display_width * _site.threshold) &&  //checks if size is out of size range
-                       (_site.images[i].old_height >= _site.images[i].display_height * _site.threshold)   //give 10% margin by default
-            ) {
-                _site.images[i].resize = true;
-//                _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
-                _site.count_resize++;
-                _site.images[i].new_width = Math.floor(_site.images[i].display_width * _site.threshold);
-                _site.images[i].new_height = Math.floor(_site.images[i].display_height * _site.threshold);
-		
-            } else {
+    	    if (_site.images[i].display_width <= 0 || _site.images[i].display_height <= 0) {
 
-		_site.images[i].resize = false; //better to have false then undefined
+    		_site.images[i].resize = false; // ignore invalid display sizes
+    		
+                } else if ((_site.images[i].old_width >= _site.images[i].display_width * _site.threshold) &&  //checks if size is out of size range
+                           (_site.images[i].old_height >= _site.images[i].display_height * _site.threshold)   //give 10% margin by default
+                ) {
+                    _site.images[i].resize = true;
+    //                _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
+                    _site.count_resize++;
+                    _site.images[i].new_width = Math.floor(_site.images[i].display_width * _site.threshold);
+                    _site.images[i].new_height = Math.floor(_site.images[i].display_height * _site.threshold);
+    		
+                } else {
 
-	    }
-	    _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
+    		_site.images[i].resize = false; //better to have false then undefined
+
+    	    }
+    	    _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
             console.log(_site.images[i].resize);
             // prints out width and heights of display and download size
             console.log(_site.images[i].image_name + "\n\t\t width: " + _site.images[i].old_width + " should be: " + _site.images[i].display_width + "\n\t\t height: " + _site.images[i].old_height + " should be: " + _site.images[i].display_height);
@@ -86,7 +92,11 @@ module.exports = {
     resize: function(_site, callback) {
         
         _site.images.forEach(function(element, index, array) {
-            if (!element.resize) {
+
+            if (element.error) {
+                callback(element,0); // skip error files
+            }
+            else if (!element.resize) {
                 callback(element,0); //skip image, its already a good size
             } else {                
                 //console.dir(element);

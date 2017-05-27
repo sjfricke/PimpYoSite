@@ -31,6 +31,10 @@ module.exports = function() {
 	// optional new meta data if resize is true
 	new_size : -1,
 	new_width : -1,
-	new_height : -1
+	new_height : -1,
+
+	// way of showing the image was not able to be handled
+	error : false,
+	errorMessage : ""
     };
 }

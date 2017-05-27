@@ -68,7 +68,7 @@ app.post('/pimpScript', (req, res, next) => {
   }).then((data) => {
     pimp_db.create(data, (err, post) => {
       if (err) {
-        console.log("ERROROROR");
+        console.error("Error creating data entry in DB:\n" + err);
         return res.status(401).send(err);
       }
 
@@ -76,7 +76,7 @@ app.post('/pimpScript', (req, res, next) => {
       return res.status(200).json(post);   
     })
   }).catch((error) => {
-    console.log("ERRRRROR" + error);
+    console.error("Error from Pimp.js\n" + error);
     return res.status(402).send(error);
   });
     
@@ -134,7 +134,7 @@ app.set('port', port);
 
 //var server = http.createServer(app);
 io.on('connection', function(socket){
-    console.log('a user connected');
+    //console.log('a user connected');
 });
 /**
  * Listen on provided port, on all network interfaces.

@@ -28,7 +28,7 @@ module.exports = {
                 return callback(image_name);
 
             } else if (!res) {
-                console.log("NO RES ON DOWNLOAD:" + uri);
+                console.error("NO RES ON DOWNLOAD:" + uri);
             }
             
 	        // if (DEBUG){console.log("attempting: " + image_name);} // res.headers['content-type']
@@ -81,9 +81,9 @@ module.exports = {
 
     	    }
     	    _site.size_old += parseInt(_site.images[i].old_size); //to compare to size resized
-            console.log(_site.images[i].resize);
+            if (DEBUG){console.log(_site.images[i].resize);}
             // prints out width and heights of display and download size
-            console.log(_site.images[i].image_name + "\n\t\t width: " + _site.images[i].old_width + " should be: " + _site.images[i].display_width + "\n\t\t height: " + _site.images[i].old_height + " should be: " + _site.images[i].display_height);
+            if (DEBUG){console.log(_site.images[i].image_name + "\n\t\t width: " + _site.images[i].old_width + " should be: " + _site.images[i].display_width + "\n\t\t height: " + _site.images[i].old_height + " should be: " + _site.images[i].display_height);}
 	}
         return;
     },    
@@ -99,7 +99,6 @@ module.exports = {
             else if (!element.resize) {
                 callback(element,0); //skip image, its already a good size
             } else {                
-                //console.dir(element);
                 resizeImg(fs.readFileSync(element.download_path), {width : element.new_width, height : element.new_height} )
                 .then(function(buf){
                     fs.writeFileSync("front/" + element.image_path, buf);

@@ -6,7 +6,7 @@
 module.exports = { 
 
     // turns on debugging for whole server code
-    debug: true,
+    debug: false,
     
     // the array of each image and the meta data with it
     images : [],

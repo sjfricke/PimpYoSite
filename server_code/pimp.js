@@ -11,7 +11,7 @@ const DEBUG = __globals.debug;
 
 module.exports = (SITE) => {
     return new Promise((resolve, reject) => {
-	console.log("started Promise");
+	if (DEBUG){console.log("started Promise");}
 	SITE.io.emit("stage", {"remain" : "92%", "message": "Time to spot up this site yo"});
 /********************************************
 Nightmare (headless browser) sequence
@@ -149,20 +149,20 @@ Nightmare (headless browser) sequence
 			_site.counter++;
 
 			//io - download
-			console.log(return_image + " saved! \t" + _site.counter + " of " + _site.count_image);
+			if (DEBUG){console.log(return_image + " saved! \t" + _site.counter + " of " + _site.count_image);}
 
 			// Barrier - All files have been downloaded
 			if (_site.counter == _site.count_image) {
 
 			    _site.counter = 0; //reset counter
-			    console.log("\n**************************\n");
+			    if (DEBUG){console.log("\n**************************\n");}
 
 			    SITE.io.emit("stage", {"remain" : "50%", "message": "Dang, you got big files boiii"});
 			    // checks each image for needed to be resized or not
 			    // since only last download calls it, we are now essetially blocking
 			    image_process.checkSize(_site);
 			    
-			    console.log("\n**************************\n");
+			    if (DEBUG){console.log("\n**************************\n");}
 			    
 			    SITE.io.emit("stage", {"remain" : "30%", "message": "Let me fix these for you"});
 			    // resizes all images marked as too big
@@ -174,31 +174,35 @@ Nightmare (headless browser) sequence
 				if (_site.counter == _site.count_resize || _site.count_resize == 0) {
 
 				    //done, report time
-				    console.log("\n**************************\n");
-				    console.log("SpeedMySite Report:");
-				    console.log("_______________________________________________");
-				    console.log("Files found: " + _site.count_image);
-				    console.log("Files found for resizing: " + _site.count_resize);
-				    console.log("Images Resized: ");
-				    for(var i = 0; i < _site.count_image; i++){
-				
-						if (_site.images[i].resize) {
-						    console.log("\t" + _site.images[i].image_name + " from " + _site.images[i].old_size + " to " + _site.images[i].new_size + " bytes");
-						}
-				    }
+				    if (DEBUG){
+					    console.log("\n**************************\n");
+					    console.log("SpeedMySite Report:");
+					    console.log("_______________________________________________");
+					    console.log("Files found: " + _site.count_image);
+					    console.log("Files found for resizing: " + _site.count_resize);
+					    console.log("Images Resized: ");
+					    for(var i = 0; i < _site.count_image; i++){
+					
+							if (_site.images[i].resize) {
+							    console.log("\t" + _site.images[i].image_name + " from " + _site.images[i].old_size + " to " + _site.images[i].new_size + " bytes");
+							}
+					    }
+					}
 
 				    SITE.io.emit("stage", {"remain" : "0%", "message": "We did it Reddit!"});
 				    _site.size_saved = (_site.size_old - _site.size_new);
 				    
-				    console.log("_______________________________________________");
-				    console.log("Old files size: \t" + _site.size_old + " bytes");
-				    console.log("New files size: \t" + _site.size_new + " bytes");
-				    console.log("_______________________________________________");
-				    console.log("Total size saved: \t" + _site.size_saved + " bytes");
-				    console.log("\tor\t\t" + (_site.size_saved / 1024).toFixed(3) + " KB");
-				    console.log("\tor\t\t" + (_site.size_saved / 1024 / 1024).toFixed(3) + " MB");
-				    console.log("ALL GOOD:");
-				    
+				    if (DEBUG){
+					    console.log("_______________________________________________");
+					    console.log("Old files size: \t" + _site.size_old + " bytes");
+					    console.log("New files size: \t" + _site.size_new + " bytes");
+					    console.log("_______________________________________________");
+					    console.log("Total size saved: \t" + _site.size_saved + " bytes");
+					    console.log("\tor\t\t" + (_site.size_saved / 1024).toFixed(3) + " KB");
+					    console.log("\tor\t\t" + (_site.size_saved / 1024 / 1024).toFixed(3) + " MB");
+					    console.log("ALL GOOD:");
+				    }
+
 				    resolve(_site);
 				}
 			    })
@@ -211,7 +215,7 @@ Nightmare (headless browser) sequence
 		}
 	    } // for(i < count_image) 
 	    
-	    console.log("\n**************************\n"); //barrier after file and url display
+	    if (DEBUG){console.log("n**************************\n");} //barrier after file and url display
 	}).catch(function (error) {
 	    console.log(error);
 //	    reject("Search failed: " + error);

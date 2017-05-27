@@ -7,3 +7,9 @@ PimpYoSite is designed to take your website via URL and scan it for any oversize
 ![Diagram of idea](./imageWasteDiagram.png)
 
 Too many times new developers are not aware that they are slowing their website, wasting bandwidth, and more all in the name of having a 3840 x 2160, 4k resolution photo being resized by the browser to a 100 x 100 thumbnail.
+
+![Diagram of network tab on typcial site](./networkTabDiagram.png)
+
+So **PLEASE** help save the world bandwidth, mobile data, and make the internet faster by Pimping Yo Site NOW!
+
+![Diagram of PimpYoSite](./remapDiagram.png)

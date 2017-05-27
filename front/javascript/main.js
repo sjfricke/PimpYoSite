@@ -42,8 +42,6 @@ function sendInput() {
 
 }
 
-
-
 function resultScript() {
 
     var printString = "";
@@ -55,8 +53,6 @@ function resultScript() {
     printString += ("Files found for resizing: " + _results.count_resize + "<br><br>");
     printString += ("Images Resized: <br><br>");
     for(var i = 0; i < _results.images.length; i++){
-
-//		console.log(_results.images[i]);
 		if (_results.images[i].resize ) {
 		    printString += ("\t" + _results.images[i].image_name + " from " + _results.images[i].old_size + " to " + _results.images[i].new_size + " bytes <br><br>");
 		}

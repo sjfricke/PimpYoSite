@@ -1,3 +1,7 @@
+.center {
+    .text-align: center;
+}
+
 /* Safari 4.0 - 8.0 */
 \@-webkit-keyframes example1 {
     0%   {color:red; font-size: 80%;}
@@ -174,4 +178,179 @@ html, body {
     0%{background-position:0% 82%}
     50%{background-position:100% 19%}
     100%{background-position:0% 82%}
+}
+
+#reportTitle {   
+    font-size: 5vh;
+    height: 7vh;
+    padding-top: 1vh;
+    -webkit-animation-name: reportColor; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 6s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-iteration-count: infinite;; /* Safari 4.0 - 8.0 */
+    -webkit-animation-timing-function: linear; /* Safari 4.0 - 8.0 */
+    animation-name: reportColor;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes reportColor {
+    0%   {background-color: green;  color: red;}
+    25%  {background-color: blue;   color: yellow;}
+    50%  {background-color: red;    color: green;}
+    75%  {background-color: yellow; color: blue;}
+    100% {background-color: green;  color: red;}
+}
+/* Standard syntax */
+@keyframes reportColor {
+    0%   {background-color: green;  color: red;}
+    25%  {background-color: blue;   color: yellow;}
+    50%  {background-color: red;    color: green;}
+    75%  {background-color: yellow; color: blue;}
+    100% {background-color: green;  color: red;}
+}
+
+.rainbowText span,
+.rainbowText:hover span {
+  -webkit-animation-name: anim-text-flow-keys;
+          animation-name: anim-text-flow-keys;
+  -webkit-animation-duration: 20s;
+          animation-duration: 20s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+          animation-direction: alternate;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+@-webkit-keyframes anim-text-flow-keys {
+  0% {
+    color: #9b5cd6;
+  }
+  5% {
+    color: #a7d65c;
+  }
+  10% {
+    color: #5cd66c;
+  }
+  15% {
+    color: #68d65c;
+  }
+  20% {
+    color: #d6665c;
+  }
+  25% {
+    color: #d6c65c;
+  }
+  30% {
+    color: #5c5cd6;
+  }
+  35% {
+    color: #5cd66c;
+  }
+  40% {
+    color: #d6a75c;
+  }
+  45% {
+    color: #5cd6ba;
+  }
+  50% {
+    color: #5cd670;
+  }
+  55% {
+    color: #d66e5c;
+  }
+  60% {
+    color: #d65c85;
+  }
+  65% {
+    color: #c4d65c;
+  }
+  70% {
+    color: #5cd676;
+  }
+  75% {
+    color: #d6975c;
+  }
+  80% {
+    color: #725cd6;
+  }
+  85% {
+    color: #a5d65c;
+  }
+  90% {
+    color: #5cd0d6;
+  }
+  95% {
+    color: #625cd6;
+  }
+  100% {
+    color: #ccd65c;
+  }
+}
+@keyframes anim-text-flow-keys {
+  0% {
+    color: #9b5cd6;
+  }
+  5% {
+    color: #a7d65c;
+  }
+  10% {
+    color: #5cd66c;
+  }
+  15% {
+    color: #68d65c;
+  }
+  20% {
+    color: #d6665c;
+  }
+  25% {
+    color: #d6c65c;
+  }
+  30% {
+    color: #5c5cd6;
+  }
+  35% {
+    color: #5cd66c;
+  }
+  40% {
+    color: #d6a75c;
+  }
+  45% {
+    color: #5cd6ba;
+  }
+  50% {
+    color: #5cd670;
+  }
+  55% {
+    color: #d66e5c;
+  }
+  60% {
+    color: #d65c85;
+  }
+  65% {
+    color: #c4d65c;
+  }
+  70% {
+    color: #5cd676;
+  }
+  75% {
+    color: #d6975c;
+  }
+  80% {
+    color: #725cd6;
+  }
+  85% {
+    color: #a5d65c;
+  }
+  90% {
+    color: #5cd0d6;
+  }
+  95% {
+    color: #625cd6;
+  }
+  100% {
+    color: #ccd65c;
+  }
 }
